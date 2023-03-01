@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50vh;
     background-color: #f7f7f7;
   }
   
@@ -18,9 +18,22 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
   
+  .login-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
   input[type="text"],
-  input[type="password"] {
-    width: 20%;
+  input[type="password"], 
+  input[type="email"]
+  {
+    width: 60%;
     padding: 10px;
     margin-bottom: 20px;
     border: none;
@@ -30,7 +43,7 @@
   }
   
   button[type="submit"] {
-    width: 10%;
+    width: 30%;
     padding: 10px;
     margin-top: 20px;
     border: none;
@@ -43,5 +56,52 @@
   
   button[type="submit"]:hover {
     background-color: #1a237e;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .box-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 600px;
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    
+  }
+  
+  .box-container:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .image-box {
+    float: right;
+    width: 50px; 
+    padding: 10px; 
+  }
+  
+  .image-box img {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
   

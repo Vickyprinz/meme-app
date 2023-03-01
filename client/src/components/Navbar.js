@@ -1,9 +1,14 @@
 import { Link } from 'react-router-dom';
+import image from './images/image.jpg';
 
 const Navbar = ({ isAuthenticated, handleLogout }) => {
 return (
 <nav className="bg-blue-700 flex items-center justify-around flex-wrap p-3">
+<div class="image-box">
+     <img src={image} alt="My image" /> 
+          </div>
 <div className="flex items-center flex-shrink-0 text-gray-800 mr-6">
+    
 <Link to="/" className="text-lg font-bold leading-tight">
 MEME APP
 </Link>

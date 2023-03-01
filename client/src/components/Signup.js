@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 const Signup = ({ handleSubmit }) => {
   return (
+    
     <form
       className="w-full max-w-sm bg-slate-300 shadow-lg rounded-xl p-5 mt-20"
       onSubmit={handleSubmit}
@@ -67,13 +68,16 @@ const Signup = ({ handleSubmit }) => {
       <div className="md:flex md:items-center mb-5">
         <div className="md:w-1/3"></div>
         <div className="md:w-2/3">
+            <Link to="/signup">
           <button
             className="shadow bg-blue-700 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded
             "
             type="submit"
           >
             Signup
+            
           </button>
+          </Link>
         </div>
       </div>
       <div className="text-gray-900 pl-10 block">
