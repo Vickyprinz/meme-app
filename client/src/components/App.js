@@ -16,4 +16,17 @@ function App() {
     setIsAuthenticated(false);
     navigate('/');
   };
+  return (
+    <div className="App">
+      <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} />} />
+        {isAuthenticated && (
+          <Route path="/shelf" element={<Meme />} />
+        )}
+      </Routes>
+    </div>
+  );
 }
+export default App;
