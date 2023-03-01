@@ -1,40 +1,35 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import Signin from "./Signin"
+import Signup from "./Signup"
+import { useNavigate} from "react-router-dom"
 
-import Navbar from './Navbar';
-import Home from './Home';
-import Meme from './Meme';
-import Register from './Register'
 
-function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+const Home = ({setIsAuthenticated}) => {
+
+    const navigate = useNavigate()
+
+    const handleSubmit=(e)=>{
+        e.preventDefault()
+        navigate('/allmemes')
+       console.log("go to home now")
+       setIsAuthenticated(true)
+    }
+
+    return ( 
+      <div>
   
-    const history = useHistory();
-  
-    const handleLogout = (e) => {
-      e.preventDefault();
-      setIsAuthenticated(false);
-      history.push('/');
-    };
-    return (
-        <div className="App">
-          <Router>
-            <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
-            <Switch>
-              <Route path="/" exact>
-                <Home setIsAuthenticated={setIsAuthenticated} />
-              </Route>
-              <Route path="/register">
-                <Register setIsAuthenticated={setIsAuthenticated} />
-              </Route>
-              {isAuthenticated && (
-                <Route path="/shelf">
-                  <Meme />
-                </Route>
-              )}
-            </Switch>
-          </Router>
+        <div className=" bg-cover bg-center flex flex-col justify-cente items-center text-white"  >
+          <Signin handleSubmit={handleSubmit} />
         </div>
-      );
-}  
-export default App;
+        <div className=" bg-cover bg-center flex flex-col justify-cente items-center text-white"  >
+          <Signup handleSubmit={handleSubmit} />
+        </div>
+
+        
+           
+           {}
+      </div>
+     )
+}
+
+ 
+export default Home;
