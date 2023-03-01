@@ -16,4 +16,24 @@ function App() {
       setIsAuthenticated(false);
       history.push('/');
     };
+    return (
+        <div className="App">
+          <Router>
+            <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+            <Switch>
+              <Route path="/" exact>
+                <Home setIsAuthenticated={setIsAuthenticated} />
+              </Route>
+              <Route path="/register">
+                <Register setIsAuthenticated={setIsAuthenticated} />
+              </Route>
+              {isAuthenticated && (
+                <Route path="/shelf">
+                  <Meme />
+                </Route>
+              )}
+            </Switch>
+          </Router>
+        </div>
+      );
 }  
