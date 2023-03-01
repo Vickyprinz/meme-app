@@ -1,7 +1,8 @@
+
 import Signin from "./Signin"
 import Signup from "./Signup"
 import { useNavigate} from "react-router-dom"
-
+import './style.css';
 
 const Home = ({setIsAuthenticated}) => {
 
