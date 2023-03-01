@@ -10,22 +10,14 @@ class ApplicationController < Sinatra::Base
       memes.to_json
     end
   
-    # delete specific meme
+    # delete meme
     delete '/memes/:id' do
       memes = Meme.find(params[:id])
       memes.destroy
       memes.to_json
     end
   
-    # create a new meme
-    post '/memes' do
-      memes = Meme.create(
-        title: params[:title],
-        message: params[:message],
-        user_id: params[:user_id]
-      )
-      memes.to_json
-    end
+ 
   
     # update a meme
     patch '/memes/:id' do
@@ -36,6 +28,16 @@ class ApplicationController < Sinatra::Base
       )
       memes.to_json
     end
+    
+       # create a new meme
+       post '/memes' do
+        memes = Meme.create(
+          title: params[:title],
+          message: params[:message],
+          user_id: params[:user_id]
+        )
+        memes.to_json
+      end
   
     # add a user
     post '/users' do
