@@ -1,0 +1,15 @@
+default: &default
+  adapter: sqlite3
+  timeout: 5000
+
+development:
+  <<: *default
+  database: db/memes-dev.sqlite3
+
+production:
+  <<: *default
+  database: db/memes-prod.db
+
+test:
+  <<: *default
+  database: db/memes-test.sqlite3
