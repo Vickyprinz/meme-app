@@ -36,10 +36,7 @@ const AddPost = ({ handleAddPost }) => {
 
   return (
     <div className="mr-20 mt-8">
-      <form
-        className="max-w-sm mx-auto mt-4 bg-slate-500 rounded-xl p-6"
-        onSubmit={handleSubmit}
-      >
+      <form className="max-w-sm mx-auto mt-4 bg-slate-500 rounded-xl p-6  "  onSubmit={handleSubmit}>
         <h1 className="text-gray-900 text-2xl font-bold text-center pb-6">
           Add your post here
         </h1>
