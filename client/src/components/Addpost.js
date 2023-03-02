@@ -1,6 +1,6 @@
 import React from "react";
 
-const Addpost = () => {
+const AddPost = ({ handleAddPost }) => {
   const [formData, setFormData] = React.useState({
     title: "",
     message: "",
@@ -8,6 +8,22 @@ const Addpost = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    fetch("http://localhost:9292/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((newPost) => {
+        handleAddPost(newPost);
+        setFormData({
+          title: "",
+          message: "",
+        });
+      });
   };
 
   const handleChange = (event) => {
@@ -25,7 +41,7 @@ const Addpost = () => {
         onSubmit={handleSubmit}
       >
         <h1 className="text-gray-900 text-2xl font-bold text-center pb-6">
-          Add your meme here
+          Add your post here
         </h1>
         <div className="mb-4">
           <label
@@ -73,4 +89,4 @@ const Addpost = () => {
   );
 };
 
-export default Addpost;
+export default AddPost;
