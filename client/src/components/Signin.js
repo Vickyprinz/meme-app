@@ -50,21 +50,18 @@ const Signin = ({ handleSubmit }) => {
         <div className="md:w-1/3"></div>
         <div className="md:w-2/3">
           <button
-            className="shadow bg-blue-700 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded
-            "
+            className="shadow bg-blue-700 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
             type="submit"
           >
             Signin
           </button>
+          <span className="ml-2">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-blue-700">
+              Sign up
+            </Link>
+          </span>
         </div>
-      </div>
-      <div className="text-gray-900 pl-10 block">
-        Dont have an account?
-        <Link to="/register">
-          <button className="shadow ml-8 bg-blue-700 hover:bg-green-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
-            sign up
-          </button>
-        </Link>
       </div>
     </form>
   );
