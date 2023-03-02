@@ -10,7 +10,7 @@ return (
 <div className="flex items-center flex-shrink-0 text-gray-800 mr-6">
     
 <Link to="/" className="text-lg font-bold leading-tight">
-MEME APP
+MEME CREATOR
 </Link>
 </div>
 <div className="flex items-center flex-shrink-0 text-gray-800 font-bold justify-center">
