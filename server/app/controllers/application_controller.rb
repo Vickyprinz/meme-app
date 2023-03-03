@@ -26,7 +26,7 @@ class ApplicationController < Sinatra::Base
     )
     memes.to_json
   end
-    
+
   # create a new meme
   post '/memes' do
     memes = Meme.create(
@@ -35,17 +35,6 @@ class ApplicationController < Sinatra::Base
       user_id: params[:user_id]
     )
     memes.to_json
-  end
-
-  # add a user
-  post '/users' do
-    users = User.create(
-      username: params[:username],
-      email: params[:email],
-      age: params[:age],
-      sex: params[:sex]
-    )
-    users.to_json
   end
 
   # fetch a user with their memes
@@ -89,14 +78,16 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  # fetch memes created by current user
-  get '/my_memes' do
-    if session[:user_id]
-      user = User.find(session[:user_id])
-      memes = user.memes.order(:created_at)
-      memes.to_json
-    else
-      { error: 'Not authenticated' }.to_json
-    end
+  # fetch all memes
+  get '/all_memes' do
+    memes = Meme.all
+    memes.to_json
   end
+end
+
+# fetch memes by title or date published
+get '/memes/search' do
+  query = params[:q]
+  memes = Meme.where("title LIKE ? OR created_at LIKE ?", "%#{query}%", "%#{query}%").order(:created_at)
+  memes.to_json
 end
