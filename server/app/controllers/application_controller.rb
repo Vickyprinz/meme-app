@@ -12,29 +12,37 @@ class ApplicationController < Sinatra::Base
 
   # delete meme
   delete '/memes/:id' do
-    memes = Meme.find(params[:id])
-    memes.destroy
-    memes.to_json
+    meme = Meme.find_by(id: params[:id], user_id: session[:user_id])
+    if meme
+      meme.destroy
+      { message: 'Meme deleted successfully' }.to_json
+    else
+      { error: 'Meme not found or you are not authorized to delete this meme' }.to_json
+    end
   end
 
   # update a meme
   patch '/memes/:id' do
-    memes = Meme.find(params[:id])
-    memes.update(
-      title: params[:title],
-      message: params[:message]
-    )
-    memes.to_json
+    meme = Meme.find_by(id: params[:id], user_id: session[:user_id])
+    if meme
+      meme.update(
+        title: params[:title],
+        message: params[:message]
+      )
+      meme.to_json
+    else
+      { error: 'Meme not found or you are not authorized to update this meme' }.to_json
+    end
   end
 
   # create a new meme
   post '/memes' do
-    memes = Meme.create(
+    meme = Meme.create(
       title: params[:title],
       message: params[:message],
-      user_id: params[:user_id]
+      user_id: session[:user_id]
     )
-    memes.to_json
+    meme.to_json
   end
 
   # fetch a user with their memes
@@ -83,11 +91,11 @@ class ApplicationController < Sinatra::Base
     memes = Meme.all
     memes.to_json
   end
-end
 
-# fetch memes by title or date published
-get '/memes/search' do
-  query = params[:q]
-  memes = Meme.where("title LIKE ? OR created_at LIKE ?", "%#{query}%", "%#{query}%").order(:created_at)
-  memes.to_json
+  # fetch memes by title or date published
+  get '/memes/search' do
+    query = params[:q]
+    memes = Meme.where("title LIKE ? OR created_at LIKE ?", "%#{query}%", "%#{query}%").order(:created_at)
+    memes.to_json
+  end
 end
