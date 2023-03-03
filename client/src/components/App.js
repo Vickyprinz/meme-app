@@ -5,8 +5,8 @@ import Navbar from './Navbar';
 import Home from './Home';
 import Meme from './Meme';
 import Signup from './Signup';
-import Addpost from './Addpost';
-import Customisedmeme from './Customisedmeme';
+import AddMeme from './AddMeme'; // Corrected import
+import CustomisedMeme from './CustomisedMeme'; // Corrected import
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,8 +40,8 @@ function App() {
         {isAuthenticated && (
           <>
             <Route path="/shelf" element={<Meme memes={myMemes} handleDeleteMessage={handleDeleteMessage} />} />
-            <Route path="/addpost" element={<Addpost setMyMemes={setMyMemes} />} />
-            <Route path="/customisedmeme" element={<Customisedmeme memes={myMemes} />} />
+            <Route path="/addpost" element={<AddMeme setMyMemes={setMyMemes} />} /> {/* Corrected component name */}
+            <Route path="/customisedmeme" element={<CustomisedMeme memes={myMemes} />} /> {/* Corrected component name */}
           </>
         )}
       </Routes>

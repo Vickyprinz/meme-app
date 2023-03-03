@@ -1,6 +1,6 @@
 // import axios from "axios"
 import React, { useState, useEffect } from "react";
-import Addpost from "./Addpost";
+import Addpost from "./AddMeme";
 
 const Meme = () => {
   const [memes, setMemes] = useState([]);
