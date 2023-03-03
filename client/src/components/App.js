@@ -41,7 +41,7 @@ function App() {
           <>
             <Route path="/shelf" element={<Meme memes={myMemes} handleDeleteMessage={handleDeleteMessage} />} />
             <Route path="/addpost" element={<Addpost setMyMemes={setMyMemes} />} />
-            <Route path="/customisedmeme" element={<Customisedmeme setMemes={setMyMemes} />} />
+            <Route path="/customisedmeme" element={<Customisedmeme memes={myMemes} />} />
           </>
         )}
       </Routes>
