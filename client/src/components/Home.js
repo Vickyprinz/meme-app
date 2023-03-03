@@ -1,21 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Signin from "./Signin";
 import Signup from "./Signup";
+import MemeGenerator from "./Meme";
 import "./style.css";
 
-const Home = ({ setIsAuthenticated }) => {
+const Home = ({ setIsAuthenticated, myMemes }) => {
   const [showSignup, setShowSignup] = useState(false);
+  const [allMemes, setAllMemes] = useState([]);
   const navigate = useNavigate();
 
-  const handleSignupClick = () => {
-    setShowSignup(true);
-  };
+  useEffect(() => {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllMemes(data.data.memes);
+      });
+  }, []);
 
   const handleSigninSubmit = (e) => {
     e.preventDefault();
     navigate("/allmemes");
-    console.log("go to home now");
     setIsAuthenticated(true);
   };
 
@@ -23,22 +28,32 @@ const Home = ({ setIsAuthenticated }) => {
     <div className="box-container">
       <div className="bg-cover bg-center flex flex-col justify-center items-center text-white">
         <Signin handleSubmit={handleSigninSubmit} />
-        {/* {!showSignup && (
-          <button
-            className="mt-2 text-sm text-white hover:text-gray-200"
-            onClick={handleSignupClick}
-          >
-            Sign Up
-          </button>
-        )} */}
       </div>
+      
       {showSignup && (
         <div className="bg-cover bg-center flex flex-col justify-center items-center text-white">
           <Signup setIsAuthenticated={setIsAuthenticated} />
         </div>
       )}
+      
+      {myMemes && (
+        <div className="meme-container">
+          {myMemes.map((meme) => (
+            <MemeGenerator key={meme.id} memes={[meme]} />
+          ))}
+        </div>
+      )}
+      
+      {allMemes && (
+        <div className="meme-container">
+          {allMemes.map((meme) => (
+            <MemeGenerator key={meme.id} memes={[meme]} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default Home;

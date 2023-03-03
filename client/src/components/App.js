@@ -5,8 +5,8 @@ import Navbar from './Navbar';
 import Home from './Home';
 import Meme from './Meme';
 import Signup from './Signup';
-import AddMeme from './AddMeme'; // Corrected import
-import CustomisedMeme from './CustomisedMeme'; // Corrected import
+import AddMeme from './AddMeme';
+import CustomisedMeme from './CustomisedMeme';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,7 +19,6 @@ function App() {
     navigate('/');
   };
 
-  // fetch memes
   useEffect(() => {
     fetch("http://localhost:9292/memes")
       .then((r) => r.json())
@@ -40,8 +39,8 @@ function App() {
         {isAuthenticated && (
           <>
             <Route path="/shelf" element={<Meme memes={myMemes} handleDeleteMessage={handleDeleteMessage} />} />
-            <Route path="/addpost" element={<AddMeme setMyMemes={setMyMemes} />} /> {/* Corrected component name */}
-            <Route path="/customisedmeme" element={<CustomisedMeme memes={myMemes} />} /> {/* Corrected component name */}
+            <Route path="/addpost" element={<AddMeme setMyMemes={setMyMemes} />} />
+            <Route path="/customisedmeme" element={<CustomisedMeme memes={myMemes} />} />
           </>
         )}
       </Routes>
