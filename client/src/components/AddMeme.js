@@ -3,7 +3,6 @@ import { useState } from "react";
 const AddMeme = ({ handleAddMemes }) => {
   
   const [message, setMessage] = useState("");
-  const [userId, setUser_id] = useState("")
   const [title, setTitle] = useState("");
 
   function handleSubmit(e) {
@@ -17,7 +16,6 @@ const AddMeme = ({ handleAddMemes }) => {
       body: JSON.stringify({
         title: title,
         message: message,
-        user_id: userId
       }),
     })
       .then((r) => r.json())

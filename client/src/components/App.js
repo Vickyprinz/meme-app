@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Home from "./Home";
-import Usermemes from "./Usermemes"
-import Signup from './Signup';
-import Memes from './Memes';
-import Usermeme from './Usermemes'
-import { useNavigate } from 'react-router-dom';
+import Signup from "./Signup";
+import Memes from "./Memes";
+import Usermemes from "./Usermemes";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [memes, setMemes] = useState([]);
   const [userMemes, setUserMemes] = useState([]);
+  const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
-
-  console.log(memes);
 
   // login user
   const handleLogin = (e) => {
@@ -24,93 +22,122 @@ function App() {
     const form = e.target;
     const formData = new FormData(form);
 
-    fetch('http://127.0.0.1:9292/login', {
-      method: 'POST',
+    fetch("http://127.0.0.1:9292/login", {
+      method: "POST",
       body: formData,
     })
       .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Network is not ok.');
+          throw new Error("Network error.");
         }
       })
       .then((data) => {
         setIsAuthenticated(true);
         setUsername(data.username);
-        navigate('/memes');
+        setUserId(data.userId);
+        navigate("/memes");
       })
       .catch((error) => {
-        console.error('fetch operation error:', error);
+        console.error("There was a problem with the fetch operation:", error);
       });
   };
 
   const handleLogout = (e) => {
     e.preventDefault();
-    fetch('http://localhost:9292/logout', {
-      method: 'POST',
+    fetch("http://localhost:9292/logout", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((response) => {
         if (response.ok) {
           setIsAuthenticated(false);
-          navigate('/');
+          navigate("/");
         } else {
-          throw new Error('Failed to logout');
+          throw new Error("Failed to logout");
         }
       })
       .catch((error) => console.error(error));
   };
 
+  // fetch all memes
   useEffect(() => {
-    fetch('http://localhost:9292/memes')
-      .then((response) => response.json())
-      .then((data) => {
-        setMemes(data.memes);
-        setUserMemes(data.user_memes);
-      })
-      .catch((error) => console.log(error));
+    fetch("http://localhost:9292/memes")
+      .then((r) => r.json())
+      .then((response) => setMemes(response.memes));
   }, []);
 
-  function handleDeleteMemes(id) {
+  // fetch memes of authenticated user
+  useEffect(() => {
+    fetch(`http://localhost:9292/usermemes/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setUserMemes(data.memes);
+      })
+      .catch((error) => console.error(error));
+  }, [userId]);
+
+  const handleSearchChange = (value) => {
+    setSearch(value);
+  };
+
+  const displayedMemes = memes.filter((meme) =>
+    meme.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const renderUsermemes = () => {
+    if (isAuthenticated) {
+      return (
+        <Usermemes
+          userId={userId}
+          userMemes={userMemes}
+          setUserMemes={setUserMemes}
+          handleDeleteMeme={handleDeleteMeme}
+          handleAddMeme={handleAddMeme}
+          handleUpdateMeme={handleUpdateMeme}
+        />
+      );
+    } else {
+      navigate("/login");
+    }
+  };
+
+  function handleDeleteMeme(id) {
     const updatedMemes = userMemes.filter((meme) => meme.id !== id);
-    console.log('delete message');
     setUserMemes(updatedMemes);
   }
 
-  function handleAddMemes(newUserMeme) {
-    setUserMemes([...userMemes, newUserMeme]);
+  function handleAddMeme(newMeme) {
+    setUserMemes([...userMemes, newMeme]);
   }
 
   function handleUpdateMeme(updatedMemeObj) {
-    const updatedMemes = userMemes.map((meme) => {
-      if (meme.id === updatedMemeObj.id) {
+    const updatedMemes = userMemes.map((message) => {
+      if (message.id === updatedMemeObj.id) {
         return updatedMemeObj;
       } else {
-        return meme;
+        return message;
       }
     });
     setUserMemes(updatedMemes);
   }
+  
 
   return (
-    <div className="bg-gray-600 h-screen">
-      <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} />
-
-      <Routes>
-        <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} handleLogin={handleLogin} />} />
-        <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
-        {isAuthenticated && (
-          <>
-            <Route path="/shelf" element={<Usermeme />} />
-            <Route path="/allmemes" element={<Memes memes={memes}/>} />
-            <Route path="/mymemes" element={<Usermemes userMemes={userMemes}
-                                                handleDeleteMemes={handleDeleteMemes}
-                                                handleAddMemes={handleAddMemes} 
-                                                handleUpdateMeme={handleUpdateMeme}
-              />} />
+    <div className="">
+      
+        <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} />
+        
+        <Routes>
+           <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated}  isAuthenticated={isAuthenticated} handleLogin={handleLogin}/>} />
+           <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated}  />} />
+           {isAuthenticated && (
+            <>
+              <Route path="/memes" element={<Memes memes={displayedMemes} displayedMemes={displayedMemes} handleSearchChange={handleSearchChange}/>} />
+              <Route path="/usermemes" element={Usermemes()}/>
             </>
            )}
         </Routes>
