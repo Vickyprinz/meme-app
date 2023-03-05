@@ -29,6 +29,7 @@ function DeleteMeme({ id, handleDeleteMemes }) {
       disabled={isLoading}
       className="shadow bg-red-700 hover:bg-green-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-full"
     >
+      DELETE
       {isLoading ? "Deleting..." : "Delete"}
     </button>
   );

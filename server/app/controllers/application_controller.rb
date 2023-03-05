@@ -1,114 +1,116 @@
 class ApplicationController < Sinatra::Base
-  configure do
-    set :default_content_type, 'application/json'
-    enable :sessions
-  end
+  set :default_content_type, 'application/json'
+  enable :sessions
 
-  before do
-    authenticate
+# register a user
+post '/users' do
+  user = User.new(
+    username: params[:username],
+    email: params[:email],
+    password: params[:password]
+  )
+  if user.save
+    session[:user_id] = user.id
+    { message: 'User registered successfully' }.to_json
+  else
+    halt 403, { errors: user.errors.full_messages }.to_json
   end
+end
 
-  # fetch all memes
-  get '/memes' do
-    memes = Meme.order(:created_at)
-    memes.to_json
+
+# login user
+post '/login' do
+  user = User.find_by(username: params[:username])
+  if user && user.authenticate(params[:password])
+    session[:user_id] = user.id
+    {
+        message: 'User logged in successfully', 
+        userId: user.id,
+        username: user.username
+    }.to_json
+  else
+    halt 403, { error: 'Invalid username or password' }.to_json
   end
+end
 
-  # delete meme
-  delete '/memes/:id' do
-    memes = Meme.find(params[:id])
-    if memes.user == current_user
-      memes.destroy
-      memes.to_json
+
+# fetch memes
+get '/memes' do
+  memes = Meme.includes(:user).order(created_at: :desc)
+  memes = memes.as_json(include: { user: { only: :username } })
+  { memes: memes }.to_json
+end
+
+# fetch logged in user's memes 
+get '/my_memes/:id' do
+  user = User.find_by(id: params[:id])
+  if user
+    memes = user.memes.order(created_at: :desc)
+    memes = memes.as_json(include: { user: { only: :username } })
+    { memes: memes }.to_json
+  else
+    halt 404, { error: 'User not found' }.to_json
+  end
+end
+
+# post a meme
+post '/users/:user_id/memes' do
+  user = User.find_by(id: params[:user_id])
+  if user
+    meme = user.memes.create(title: params[:title], message: params[:message])
+    if meme.valid?
+      meme.to_json(include: { user: { only: :username } })
     else
-      { error: 'You are not authorized to delete this meme' }.to_json
+      halt 422, { error: 'Meme could not be created' }.to_json
     end
+  else
+    halt 404, { error: 'User not found' }.to_json
   end
+end
 
-  # update a meme
-  patch '/memes/:id' do
-    memes = Meme.find(params[:id])
-    if memes.user == current_user
-      memes.update(
-        title: params[:title],
-        message: params[:message]
-      )
-      memes.to_json
+# edit meme
+patch '/users/:id/memes/:meme_id' do
+  user = User.find_by(id: params[:user_id])
+  if user
+    meme = user.memes.find_by(id: params[:meme_id])
+    if meme
+      if meme.update(title: params[:title], message: params[:message])
+        meme.to_json(include: { user: { only: :username } })
+      else
+        halt 422, { error: 'Meme could not be updated' }.to_json
+      end
     else
-      { error: 'You are not authorized to update this meme' }.to_json
+      halt 404, { error: 'Meme not found' }.to_json
     end
+  else
+    halt 404, { error: 'User not found' }.to_json
   end
+end
 
-  # create a new meme
-  post '/memes' do
-    memes = Meme.create(
-      title: params[:title],
-      message: params[:message],
-      user_id: current_user.id
-    )
-    memes.to_json
+
+  # delete meme from database
+delete '/memes/:id/users/:user_id' do
+  meme = Meme.find_by(id: params[:id], user_id: params[:user_id])
+  if meme
+    meme.destroy
+    { message: 'Meme deleted' }.to_json
+  else
+    halt 404, { error: 'Meme not found' }.to_json
   end
+end
+  
+  
+  
 
-  # fetch a user with their memes
-  get '/users/:id' do
-    user = User.find(params[:id])
-    user.to_json(include: :memes)
-  end
 
-  # register a new user
-  post '/register' do
-    user = User.new(
-      username: params[:username],
-      email: params[:email],
-      password: params[:password]
-    )
-    if user.save
-      { message: 'User registered successfully' }.to_json
-    else
-      { errors: user.errors.full_messages }.to_json
-    end
-  end
 
-  # login
-  post '/login' do
-    user = User.find_by(username: params[:username])
-    if user && user.authenticate(params[:password])
-      session[:user_id] = user.id
-      { message: 'User logged in successfully' }.to_json
-    else
-      { error: 'Invalid username or password' }.to_json
-    end
-  end
 
-  # get current user
-  get '/me' do
-    if current_user
-      { username: current_user.username, email: current_user.email }.to_json
-    else
-      { error: 'Not authenticated' }.to_json
-    end
-  end
 
-  # fetch all memes
-  get '/all_memes' do
-    memes = Meme.all
-    memes.to_json
-  end
 
-  # fetch memes by title or date published
-  get '/memes/search' do
-    query = params[:q]
-    memes = Meme.where("title LIKE ? OR created_at LIKE ?", "%#{query}%", "%#{query}%").order(:created_at)
-    memes.to_json
-  end
+# logout user
+post '/logout' do
+  session.clear
+  { message: 'User logged out successfully' }.to_json
+end
 
-  private
-
-  def current_user
-    User.find_by(id: session[:user_id])
-  end
-
-  def authenticate
-    halt 401, { error: 'Not authenticated' }.to_json unless current_user
-  end
 end

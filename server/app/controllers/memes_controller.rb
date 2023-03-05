@@ -1,20 +1,20 @@
-# app/controllers/memes_controller.rb
+# # app/controllers/memes_controller.rb
 
-class MemesController < ApplicationController
-    def create
-      @meme = Meme.new(meme_params)
+# class MemesController < ApplicationController
+#     def create
+#       @meme = Meme.new(meme_params)
       
-      if @meme.save
-        render json: @meme, status: :created
-      else
-        render json: @meme.errors, status: :unprocessable_entity
-      end
-    end
+#       if @meme.save
+#         render json: @meme, status: :created
+#       else
+#         render json: @meme.errors, status: :unprocessable_entity
+#       end
+#     end
     
-    private
+#     private
     
-    def meme_params
-      params.require(:meme).permit(:title, :image_url)
-    end
-  end
+#     def meme_params
+#       params.require(:meme).permit(:title, :image_url)
+#     end
+#   end
   

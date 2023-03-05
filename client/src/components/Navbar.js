@@ -14,23 +14,47 @@ const Navbar = ({ isAuthenticated, handleSignout, username }) => {
         </NavLink>
       </div>
       <div className="flex items-center flex-shrink-0 text-yellow-200 font-bold justify-center">
-        <NavLink to="/" exact className="ml-5">
+        <NavLink
+          to="/"
+          exact
+          className="ml-5 nav-link home"
+          activeClassName="active"
+        >
           Home
         </NavLink>
         {isAuthenticated ? (
           <>
-            <NavLink to="/usermemes" exact className="ml-5">
+            <NavLink
+              to="/usermemes"
+              exact
+              className="ml-5 nav-link my-memes"
+              activeClassName="active"
+            >
               My memes
             </NavLink>
-            <NavLink to="/memes" exact className="ml-5">
-               Memes
+            <NavLink
+              to="/memes"
+              exact
+              className="ml-5 nav-link memes"
+              activeClassName="active"
+            >
+              Memes
             </NavLink>
-            <NavLink onClick={handleSignout} to="/signout" exact className="ml-5">
+            <NavLink
+              onClick={handleSignout}
+              to="/signout"
+              exact
+              className="ml-5 nav-link sign-out"
+            >
               Signout
             </NavLink>
           </>
         ) : (
-          <NavLink to="/signup" className="ml-8">
+          <NavLink
+            to="/signup"
+            className="ml-8 nav-link meme-generator"
+            activeClassName="active"
+          >
             Signup
           </NavLink>
         )}
