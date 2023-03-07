@@ -41,6 +41,7 @@ get '/memes' do
   { memes: memes }.to_json
 end
 
+
 # fetch logged in user's memes 
 get '/my_memes/:id' do
   user = User.find_by(id: params[:id])
@@ -100,14 +101,7 @@ delete '/memes/:id/users/:user_id' do
 end
   
   
-  
 
-
-
-
-
-
-# logout user
 post '/logout' do
   session.clear
   { message: 'User logged out successfully' }.to_json

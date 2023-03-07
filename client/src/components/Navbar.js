@@ -32,14 +32,14 @@ const Navbar = ({ isAuthenticated, handleSignout, username }) => {
             >
               My memes
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/memes"
               exact
               className="ml-5 nav-link memes"
               activeClassName="active"
             >
               Memes
-            </NavLink>
+            </NavLink> */}
             <NavLink
               onClick={handleSignout}
               to="/signout"

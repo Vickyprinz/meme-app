@@ -9,7 +9,7 @@ const Meme = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const url = `https://api.imgflip.com/caption_image?template_id=${meme.id}&username=your_username&password=your_password&text0=${topText}&text1=${bottomText}`;
+    const url = `https://api.imgflip.com/caption_image?template_id=${meme.id}&username=your_username&password=your_password&text0=${encodeURIComponent(topText)}&text1=${encodeURIComponent(bottomText)}`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -39,6 +39,8 @@ const Meme = () => {
         const randomIndex = Math.floor(Math.random() * memes.length);
         const randomMeme = memes[randomIndex];
         setMeme(randomMeme);
+        setTopText("");
+        setBottomText("");
       })
       .catch(error => console.log(error));
   };
