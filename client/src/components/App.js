@@ -22,7 +22,6 @@ function App() {
   
   console.log(userMemes)
 
-// login user
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -52,7 +51,7 @@ function App() {
 
   console.log(userId)
 
-  const handleLogout = (e) => {
+  const handleSignout = (e) => {
     e.preventDefault();
     fetch('http://localhost:9292/logout', {
       method: 'POST',
@@ -72,7 +71,6 @@ function App() {
   };
   
 
-// fetch all memes
 useEffect(() => {
   fetch("http://localhost:9292/memes")
     .then((r) => r.json())
@@ -81,7 +79,6 @@ useEffect(() => {
 
 
 
-//  fetch memes of authenticated user
 useEffect(() => {
   fetch(`http://localhost:9292/user_memes/${userId}`)
     .then((response) => response.json())
@@ -128,7 +125,6 @@ const handleEditMeme = (id, updatedMeme) => {
   })
     .then(response => {
       if (response.ok) {
-        // Update the meme in the state
         const updatedMemes = userMemes.map(meme => {
           if (meme.id === id) {
             return { ...meme, ...updatedMeme };
@@ -161,7 +157,7 @@ const handleEditMeme = (id, updatedMeme) => {
   return (
     <div className="">
       
-        <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} />
+        <Navbar isAuthenticated={isAuthenticated} handleSignout={handleSignout} username={username} />
         
         <Routes>
            <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated}  isAuthenticated={isAuthenticated} handleLogin={handleLogin}/>} />
