@@ -49,22 +49,29 @@ const Navbar = ({ isAuthenticated, handleSignout, username }) => {
               Signout
             </NavLink>
           </>
-        ) : (
-          <NavLink
-            to="/signup"
-            className="ml-8 nav-link meme-generator"
-            activeClassName="active"
-          >
-            Signup
-          </NavLink>
-        )}
-      </div>
-      {isAuthenticated ? (
-        <div className="flex">
-          <p className="text-yellow-300 font-semibold text-2xl">{username}</p>
-        </div>
-      ) : null}
-    </nav>
+      
+       ) : (
+         <>
+           <NavLink to="/signin" className="ml-8 nav-link meme-generator">
+             SignIn
+           </NavLink>
+           <NavLink
+             to="/signup"
+             className="ml-8 nav-link meme-generator"
+             activeClassName="active"
+           >
+             Signup
+           </NavLink>
+         </>
+       )}
+     </div>
+     {isAuthenticated ? (
+       <div className="flex">
+         <p className="text-yellow-300 font-semibold text-2xl">{username}</p>
+       </div>
+     ) : null}
+   </nav>
+
   );
 };
 

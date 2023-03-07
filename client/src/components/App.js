@@ -5,7 +5,7 @@ import Memes from './Memes'
 import Navbar from "./Navbar"
 import Home from "./Home"
 import Signup from './Signup'
-
+import SignIn from './Signin'
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
   
   console.log(userMemes)
 
-  const handleLogin = (e) => {
+  const handleSignin = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -160,7 +160,9 @@ const handleEditMeme = (id, updatedMeme) => {
         <Navbar isAuthenticated={isAuthenticated} handleSignout={handleSignout} username={username} />
         
         <Routes>
-           <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated}  isAuthenticated={isAuthenticated} handleLogin={handleLogin}/>} />
+        <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} handleSignin={handleSignin} />} />
+
+           <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated}  isAuthenticated={isAuthenticated} handleSignin={handleSignin}/>} />
            <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated}  />} />
            {isAuthenticated && (
             <>
